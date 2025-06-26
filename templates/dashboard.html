@@ -1,0 +1,77 @@
+{% extends "layout.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block main %}
+
+    <div class="container">
+        <h2>Your Dashboard</h2>
+
+        <h4 class="mb-3">Your Tasks</h4>
+        <table class="table table-striped">
+            <thead class="table-light">
+                <tr>
+                    <th>Title</th>
+                    <th>Due Date</th>
+                    <th>Priority</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for task in tasks %}
+                    <tr>
+                        <td>{{ task.title }}</td>
+                        <td>{{ task.due_date }}</td>
+                        <td>{{ task.priority }}</td>
+                        <td>
+                            {% if task.complete %}
+                                <span class="badge bg-success">Complete</span>
+                            {% else %}
+                                <span class="badge bg-warning">Incomplete</span>
+                            {% endif %}
+                        
+                        </td>
+                    
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="4" class="text-center">No tasks found.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <h4 class="mb-3">Recent Study Sessions</h4>
+        
+        <canvas id="studyChart" width="400" height="200"></canvas>
+
+        <script>
+            const ctx = document.getElementById('studyChart').getContext('2d');
+            const studyChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: {{ labels | tojson }},
+                    datasets: [{
+                        label: 'minutes Studied',
+                        data: {{ values | tojson }},
+                        backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: { display: true, text: 'Minutes Studied' }
+                        },
+                        x: {
+                            title: { display: true, text: 'Date' }
+                        }
+                    }
+                }
+            });
+        </script>
+            
+    </div>
+{% endblock %}

@@ -1,0 +1,62 @@
+{% extends "layout.html" %}
+
+{% block main %}
+
+    <div class="container">
+        <h2>Manage Tasks</h2>
+        
+        <form method="POST" class="container">
+            <div class="mb-3">
+                <input type="text" name="title" class="form-control" placeholder="Task Title" required>
+            </div>
+            <div class="mb-3">
+                <input type="date" name="due_date" class="form-control">
+            </div>
+            <div class="mb-3">
+                <textarea name="description" class="form-control" placeholder="Task Descripion(optional)"></textarea>
+            </div>
+            <div class="mb-3">
+                <select name="priority" class="form-select">
+                    <option value="low">Low Priority</option>
+                    <option value="medium">Medium Priority</option>
+                    <option value="high">High Priority</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Add Task</button>
+        </form>
+
+        <table class="table table-striped">
+            <thead class="table-light">
+                <tr>
+                    <th>Title</th>
+                    <th>Due Date</th>
+                    <th>Priority</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for task in tasks %}
+                    <tr>
+                        <td>{{ task.title }}</td>
+                        <td>{{ task.due_date }}</td>
+                        <td>{{ task.priority }}</td>
+                        <td>
+                            {% if task.complete %}
+                                <span class="badge bg-success">Complete</span>
+                            {% else %}
+                                <span class="badge bg-warning">Incomplete</span>
+                            {% endif %}
+                        
+                        </td>
+                    
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="4" class="text-center">No tasks found.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}

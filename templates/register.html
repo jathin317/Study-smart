@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Study Smart: Register
+{% endblock %}
+
+{% block main %}
+    <form action="/register" method="post" class="container">
+        <h2 class="text-center mb-4">Register</h2>
+        <div class="mb-3">
+            <input autocomplete="off" autofocus type="text" name="username" placeholder="Username" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <input type="password" name="password" placeholder="Password" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <input type="password" name="confirm_password" placeholder="Confirm Password" class="form-control" required>
+        </div>
+        <div class="d-grid">
+            <button type="submit" class="btn btn-primary">Register</button>
+        </div>
+    </form>
+{% endblock %}

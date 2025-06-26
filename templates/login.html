@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Study Smart: Login
+{% endblock %}
+
+{% block main %}
+    <form action="/login" method="post" class="container">
+        <h2>Login</h2>
+        <div class="mb-3">
+            <input autocomplete="off" autofocus type="text" name="username" placeholder="Username" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <input type="password" id="password" name="password" placeholder="Password" class="form-control" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Login</button>
+    </form>
+{% endblock %}
