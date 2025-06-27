@@ -32,6 +32,7 @@
                     <th>Due Date</th>
                     <th>Priority</th>
                     <th>Status</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -46,13 +47,21 @@
                             {% else %}
                                 <span class="badge bg-warning">Incomplete</span>
                             {% endif %}
-                        
                         </td>
-                    
+                        <td>
+                            {% if not task.complete %}
+                                <form method="POST" action="/complete_task" style="display:inline;">
+                                    <input type="hidden" name="task_id" value="{{ task.id }}">
+                                    <button type="submit" class="btn btn-success btn-sm">Mark Complete</button>
+                                </form>
+                            {% else %}
+                                <span class="text-muted">—</span>
+                            {% endif %}
+                        </td>
                     </tr>
                 {% else %}
                     <tr>
-                        <td colspan="4" class="text-center">No tasks found.</td>
+                        <td colspan="5" class="text-center">No tasks found.</td>
                     </tr>
                 {% endfor %}
             </tbody>

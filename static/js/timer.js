@@ -2,17 +2,21 @@ let duration = 25 * 60;
 let timeLeft = duration;
 let interval = null;
 
-function displayTime(){
+function pad(num) {
+    return num.toString().padStart(2, '0');
+}
+
+function displayTime() {
     const minutes = Math.floor(timeLeft / 60);
     const seconds = timeLeft % 60;
-    document.getElementById("timer").innerText = pad(minutes) + ":" + pad(seconds);
+    document.getElementById("time").innerText = pad(minutes) + ":" + pad(seconds);
 }
 
 function start() {
     if (interval)
         return;
 
-    document.getElementById("status").innerText = "timer running...";
+    document.getElementById("status").innerText = "Timer running...";
     interval = setInterval(() => {
         timeLeft--;
         displayTime();
@@ -37,14 +41,14 @@ function pause() {
 
 function reset() {
     pause();
-    timeLeft = totalSeconds;
+    timeLeft = duration;
     displayTime();
 
     document.getElementById("status").innerText = "Ready to begin";
 }
 
 function logSession() {
-    fetch("/log_session", { method: "POST"});
+    fetch("/log_session", { method: "POST" });
 }
 
 document.getElementById("start").onclick = start;

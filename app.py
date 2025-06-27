@@ -37,7 +37,7 @@ def login():
         
         db = get_db()
         user = db.execute("SELECT * FROM users WHERE username = ?", (username,)).fetchone()
-        if user is None or not check_password_hash(user["password"], password):
+        if user is None or not check_password_hash(user["hash"], password):
             flash("Invalid username or password.")
             return redirect("/login")
         flash("Logged in successfully.")
@@ -74,7 +74,7 @@ def register():
             return redirect("/register")
 
         hashed_password = generate_password_hash(password)
-        db.execute("INSERT INTO users (username, password) VALUES (?, ?)", (username, hashed_password))
+        db.execute("INSERT INTO users (username, hash) VALUES (?, ?)", (username, hashed_password))
         db.commit()
         flash("Registered successfully. Please log in.")
         return redirect("/login")
@@ -111,12 +111,15 @@ def tasks():
             flash("Task title is required.", "danger")
             return redirect("/tasks")
         
-        db.execute("INSERT INTO tasks (user_id, title, description, due_date, priority) VALUES (?, ?, ?, ?, ?)", (user_id, title, description, due_date, priority))
+        db.execute("INSERT INTO tasks (user_id, title, description, due_date, priority) VALUES (?, ?, ?, ?, ?)", 
+                   (user_id, title, description, due_date, priority))
         db.commit()
         flash("Task added successfully.", "success")
+        return redirect("/tasks")
 
-        tasks = db.execute("SELECT * FROM tasks WHERE user_id = ? ORDER BY due_date ASC", (user_id,)).fetchall()
-        return render_template("tasks.html", tasks=tasks)
+    tasks = db.execute("SELECT * FROM tasks WHERE user_id = ? ORDER BY due_date ASC", (user_id,)).fetchall()
+    return render_template("tasks.html", tasks=tasks)
+
 
 @app.route("/timer")
 @login_required
@@ -134,3 +137,14 @@ def log_session():
     db.commit()
 
     return "", 204
+
+@app.route("/complete_task", methods=["POST"])
+@login_required
+def complete_task():
+    db = get_db()
+    user_id = session["user_id"]
+    task_id = request.form.get("task_id")
+    db.execute("UPDATE tasks SET complete = 1 WHERE id = ? AND user_id = ?", (task_id, user_id))
+    db.commit()
+    flash("Task marked as complete.", "success")
+    return redirect("/tasks")
