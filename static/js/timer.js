@@ -1,4 +1,4 @@
-let duration = 25 * 60;
+let duration = 55 * 60;
 let timeLeft = duration;
 let interval = null;
 
